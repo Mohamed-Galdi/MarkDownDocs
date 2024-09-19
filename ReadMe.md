@@ -5,6 +5,8 @@ This repository contains my personal notes and resources for various programming
 ## Table of Contents
 
 - [Vue.js Notes](./Vuejs/vuejs.md)
+- [Nuxt3 Notes](./Nuxt/nuxt.md)
+- Incertia.js (In Progress...)
 
 Each markdown file is structured to help me (or others) quickly refer back to important details and visual references through screenshots or diagrams when working with these frameworks.
 
