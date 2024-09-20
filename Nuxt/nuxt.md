@@ -94,12 +94,9 @@ You can get a file in the `public/` directory from your application's code or 
 For example, referencing an image file in the `public/img/` directory, available at the static URL `/img/nuxt.png`:
 
 ```html
-
 <template>
   <img src="/img/nuxt.png"/>
 </template>
-
-
 ```
 
 ## b. assets:
@@ -111,12 +108,9 @@ In your application's code, you can reference a file located in the `assets/` 
 For example, referencing an image file that will be processed if a build tool is configured to handle this file extension:
 
 ```html
-
 <template>
   <img src="~/assets/img/nuxt.png" />
 </template>
-
-
 ```
 
 # 4. Components
@@ -360,10 +354,10 @@ This file system routing uses naming conventions to create dynamic and nested ro
 {  
       "path": "/about",
       "component": "pages/about.vue",
-   
+
       "path": "/",
       "component": "pages/index.vue",
-   
+
       "path": "/posts/:id",
       "component": "pages/posts/[id].vue",
 }
@@ -568,3 +562,96 @@ const { data, error } = await useAsyncData('users', () => myGetFunction('users')
 const { data, error } = await useAsyncData(() => myGetFunction('users'))
 </script>
 ```
+
+# 7. Utils
+
+## a. definePageMeta
+
+`definePageMeta` is a function provided by Nuxt that you can use to set metadata for your `page` components located in the `pages/` directory. This way you can set custom metadata for each static or dynamic route of your Nuxt application.
+
+It is used also to set a specific layout and middleware for a specific page:
+
+```js
+definePageMeta({
+  title: 'My Page Title',
+  layout: 'custom',
+  middleware: ['auth']
+})
+```
+
+Middlewares can be defined using a `function` directly within the `definePageMeta` or set as a `string` that matches the middleware file name located in the `middleware/` directory:
+
+```html
+<script setup lang="ts">
+definePageMeta({
+  // define middleware as a function
+  middleware: [
+    function (to, from) {
+      const auth = useState('auth')
+
+      if (!auth.value.authenticated) {
+          return navigateTo('/login')
+      }
+
+      if (to.path !== '/checkout') {
+        return navigateTo('/checkout')
+      }
+    }
+  ],
+
+  // ... or a string
+  middleware: 'auth'
+
+  // ... or multiple strings
+  middleware: ['auth', 'another-named-middleware']
+})
+</script>
+```
+
+You can define the layout that matches the layout's file name located (by default) in the `layouts/` directory. You can also disable the layout by setting the `layout` to `false`:
+
+```html
+<script setup lang="ts">
+definePageMeta({
+  // set custom layout
+  layout: 'admin'
+
+  // ... or disable a default layout
+  layout: false
+})
+</script>
+```
+
+## b. useState
+
+`useState` is an SSR-friendly `ref` replacement. Its value will be preserved after server-side rendering (during client-side hydration) and shared across all components using a unique key.
+
+```js
+// Create a reactive state and set default value
+const Counter = useState('counter', () => 0);
+```
+
+The main differences between `ref()` and `useState()` in Nuxt 3 are:
+
+1. Origin and Scope:
+   - `ref()` is from Vue's Composition API
+   - `useState()` is a Nuxt 3-specific composable
+2. Persistence:
+   - `ref()` creates reactive references that don't persist between page navigations
+   - `useState()` creates reactive state that persists across page navigations
+3. Server-Side Rendering (SSR) Behavior:
+   - `ref()` values are not shared between server and client
+   - `useState()` hydrates state from server to client
+4. Usage Context:
+   - `ref()` can be used anywhere in Vue components
+   - `useState()` is typically used in Nuxt pages, layouts, or plugins
+
+# 8. Helpful Resources
+
+## a. Nuxt Modules
+
+For extending your Nuxt application, check out the [Nuxt Modules](https://nuxt.com/modules). It offers a wide variety of modules for common needs, including integrations with Firebase, Supabase, Pinia, and many more. These modules can significantly speed up development and add powerful features to your project.
+
+## b. VueUse
+
+Another invaluable resource is [VueUse](https://vueuse.org/), an open-source collection of Vue composition utilities. VueUse provides a wealth of composables for common tasks like handling drag-and-drop, detecting clicks outside elements, managing localStorage, and much more. These composables are crafted by experienced developers and benefit from community contributions, often resulting in more robust and efficient solutions than individual implementations.
