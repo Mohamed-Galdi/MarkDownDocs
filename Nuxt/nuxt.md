@@ -655,3 +655,49 @@ For extending your Nuxt application, check out the [Nuxt Modules](https://nuxt.c
 ## b. VueUse
 
 Another invaluable resource is [VueUse](https://vueuse.org/), an open-source collection of Vue composition utilities. VueUse provides a wealth of composables for common tasks like handling drag-and-drop, detecting clicks outside elements, managing localStorage, and much more. These composables are crafted by experienced developers and benefit from community contributions, often resulting in more robust and efficient solutions than individual implementations.
+
+# 9. Additional Notes
+
+## a. Passing Assets Between Components
+
+When using Nuxt 3 with Vite, images in the `assets` folder are processed during bundling. To pass these images as props between components, you need to **import** the image in the parent component and pass the resolved image path to the child component.
+
+**Steps**:
+
+1. **Import the image** from the `assets` folder in the parent component.
+2. **Pass the image** as a prop to the child component.
+3. In the child component, use the **resolved image path** from the prop.
+
+```html
+<!-- MyComponent.vue -->
+<script setup>
+// Define props to accept the image path
+const props = defineProps({
+  image: String,
+});
+</script>
+
+<template>
+  <!-- Use the image prop in the img src attribute -->
+  <div>
+    <img :src="image" class="w-full h-full object-cover" />
+  </div>
+</template>
+
+
+```
+
+```html
+<!-- Parent Component-->
+<script setup>
+// Import image from the assets folder
+import myImage from '~/assets/myimage.png';
+</script>
+
+<template>
+  <!-- Pass the resolved image path as a prop -->
+  <MyComponent :image="myImage" />
+</template>
+
+
+```
