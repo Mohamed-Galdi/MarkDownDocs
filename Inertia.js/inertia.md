@@ -343,7 +343,7 @@ Use the `<Head>` component to include elements like `<title>` and `<meta>` tags 
 <script setup>
 import { Head } from '@inertiajs/vue3'
 </script>
-    
+
 <template>
   <Head>
     <title>Your page title</title>
@@ -358,7 +358,7 @@ For simpler use cases, you can pass the title directly as a prop to the `<Head>`
 <script setup>
 import { Head } from '@inertiajs/vue3'
 </script>
-    
+
 <template>
   <Head title="Your page title" />
 </template>
@@ -613,7 +613,6 @@ const form = useForm({
     <button type="submit" :disabled="form.processing">Login</button>
   </form>
 </template>
-
 ```
 
 To prevent users from submitting the form multiple times by accident, use the `form.processing` property. This is a boolean that indicates whether the form is currently being submitted. You can disable the submit button based on this status.
@@ -733,6 +732,8 @@ One of the key advantages of Inertia is that it automatically **preserves the co
 - **Old form input data** will remain intact when the user is redirected back to the form page.
 - There’s no need to manually repopulate the input fields.
 
+💡 **Note**: Inertia automatically includes the **CSRF** token with all requests. Additionally, when it detects file uploads, it converts the request data to **FormData** behind the scenes. This means there’s no need to manually set the `multipart/form-data` header when handling file uploads.
+
 # 11. Sharing Data
 
 The most common way to share data in Laravel is through the `HandleInertiaRequests` middleware. This ensures that data is available across all Inertia responses without manually passing it to each page.
@@ -772,4 +773,471 @@ const user = computed(() => page.props.auth.user)
       You are logged in as: {{ user.name }}
     </p>
 </template>
+```
+
+# 12. Scroll Management
+
+When navigating between pages, the default browser behavior is resetting the scroll position of the document body to the top.
+
+Inertia mimics this browser behavior automatically. However, you can control and customize this behavior.
+
+- You can prevent the scroll from resetting by using the `preserveScroll` option:
+
+```js
+import { router } from '@inertiajs/vue3'
+router.visit(url, { preserveScroll: true })
+```
+
+- Preserve the scroll position only when validation errors occur:
+
+```js
+router.visit(url, { preserveScroll: 'errors' })
+```
+
+- You can evaluate scroll preservation based on a condition:
+
+```js
+router.post('/users', data, {
+  preserveScroll: (page) => page.props.someProp === 'value',
+})
+```
+
+- To preserve scroll in an Inertia link, use the `preserve-scroll` prop:
+
+```html
+<Link href="/" preserve-scroll>Home</Link>
+```
+
+# 13. Authorization
+
+When using Inertia, authorization is best handled server-side in your application's authorization policies. However, you may be wondering how to perform checks against your authorization policies from within your Inertia page components since you won't have access to your framework's server-side helpers.
+
+The simplest approach to solving this problem is to pass the results of your authorization checks as props to your page components.
+
+```php
+class UsersController extends Controller
+{
+    public function index()
+    {
+        return Inertia::render('Users/Index', [
+            'can' => [
+                'create_user' => Auth::user()->can('create', User::class),
+            ],
+            'users' => User::all()->map(function ($user) {
+                return [
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                    'can' => [
+                        'edit_user' => Auth::user()->can('edit', $user),
+                    ]
+                ];
+            }),
+        ]);
+    }
+}
+```
+
+# 14. Progress indicators
+
+Since Inertia requests are made via XHR, there would typically not be a browser loading indicator when navigating from one page to another. To solve this, Inertia displays a progress indicator at the top of the page whenever you make an Inertia visit.
+
+Of course, if you prefer, you can disable Inertia's default loading indicator and provide your own custom implementation.
+
+Inertia's default progress indicator is a light-weight wrapper around the [NProgress](https://ricostacruz.com/nprogress/) library. You can customize it via the `progress` property of the `createInertiaApp()` function.
+
+```js
+createInertiaApp({
+  progress: {
+    // The delay after which the progress bar will appear, in milliseconds...
+    delay: 250,
+
+    // The color of the progress bar...
+    color: '#29d',
+
+    // Whether to include the default NProgress styles...
+    includeCSS: true,
+
+    // Whether the NProgress spinner will be shown...
+    showSpinner: false,
+  },
+  // ...
+})
+```
+
+You can disable Inertia's default loading indicator by setting the `progress` property to `false`.
+
+```js
+createInertiaApp({
+  progress: false,
+})
+```
+
+# 15. PrimeVue
+
+PrimeVue is a feature-rich and customizable UI component library for Vue.js. Here's how to integrate it into your VILT stack.
+
+Start by installing PrimeVue and its theme package:
+
+```shell
+npm install primevue @primevue/themes
+```
+
+In your app's main JavaScript file where you initialize the `createInertiaApp`, register PrimeVue.
+
+```js
+import { ZiggyVue } from "../../vendor/tightenco/ziggy";
+import PrimeVue from "primevue/config";
+import Aura from '@primevue/themes/aura'; // Import the desired theme
+
+createInertiaApp({
+    title: (title) => `${title} | My App`,
+    
+    resolve: (name) => {
+        // Resolve your pages here
+    },
+
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .use(ZiggyVue)
+            // Register PrimeVue with the theme
+            .use(PrimeVue, {
+                theme: {
+                    preset: Aura, // Using the Aura theme as an example
+                },
+            })
+            .mount(el); // Mount the application
+    },
+});
+```
+
+Once PrimeVue is registered, you can start using its components in your Vue files. For example, here’s how to use the `DatePicker` component:
+
+```html
+<script setup>
+import { ref } from 'vue';
+import DatePicker from 'primevue/datepicker';
+
+const dates = ref();
+</script>
+
+<template>
+    <div class="card flex justify-center">
+        <DatePicker v-model="dates" selectionMode="range" :manualInput="false" />
+    </div>
+</template>
+```
+
+PrimeVue components are fully customizable via CSS variables. To change the default colors or other styles, you can override the CSS variables in your main CSS file. If you're using Tailwind, include it alongside the custom styles:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary-color: #858dfb !important;
+    --primary-color-text: #ffffff !important;
+    --p-primary-50: #eef2ff !important;
+    --p-primary-100: #e0e7ff !important;
+    --p-primary-200: #c7d2fe !important;
+    --p-primary-300: #a5b4fc !important;
+    --p-primary-400: #818cf8 !important;
+    --p-primary-500: #6366f1 !important;
+    --p-primary-600: #4f46e5 !important;
+    --p-primary-700: #4338ca !important;
+    --p-primary-800: #3730a3 !important;
+    --p-primary-900: #312e81 !important;
+    --p-primary-950: #1e1b4b !important;
+
+    --p-select-focus-border-color: #262626 !important;
+    --p-multiselect-focus-border-color: #262626 !important;
+}
+```
+
+PrimeVue's CSS classes can be overridden to style any individual component. For example, here's how to customize a button within a file upload component:
+
+```css
+.p-fileupload .p-button {
+    background: black;
+    border: solid 1px white;
+}
+```
+
+# 16. Table Example:
+
+Let's create a simple table with search functionality using **Laravel**, **Inertia.js**, and **Vue**.
+
+In the controller, we retrieve and paginate the users, passing the data to an Inertia view:
+
+```php
+public function index()
+    {
+        $users = User::paginate(10);
+        return inertia('Users', ['users' => $users]);
+    }
+```
+
+We can access the passed data in the Vue component as a prop:
+
+```html
+<script setup>
+defineProps({
+  users: Object, // Using `Object` to ensure access to pagination properties
+})
+</script>
+
+<template>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="user in users.data" :key="user.id">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+</template>
+```
+
+Since we passed paginated data, we have access to pagination links. Display them like this:
+
+```html
+<!-- Pagination Links -->
+<Link
+  v-for="link in users.links"
+  :key="link.url"
+  :href="link.url"
+  v-html="link.label"
+  class="p-1 m-1 bg-slate-800 text-white rounded-md"
+  :class="{ 'bg-slate-500': !link.url, 'bg-orange-500': link.active }"
+></Link>
+```
+
+You can also display information about the current results:
+
+```html
+<!-- Results Count -->
+<p>Showing {{ users.from }} to {{ users.to }} of {{ users.total }} users</p>
+```
+
+Next, we'll add a search input field:
+
+```html
+<div>
+  <input
+    v-model="search"
+    type="search"
+    name="search"
+    class="bg-slate-300 text-slate-800 p-2 rounded-md"
+    placeholder="Search"
+  />
+</div>
+```
+
+You can trigger search on button click, but here we’ll watch the input for changes:
+
+```html
+<script setup>
+import { watch, ref } from "vue";
+
+const search = ref("");
+
+watch(search, () => {
+  console.log(search.value);
+});
+</script>
+```
+
+Instead of printing the query, let’s make an Inertia request to the same route with the search term:
+
+```html
+<script setup>
+import { watch, ref } from "vue";
+import { router } from "@inertiajs/vue3";
+
+const search = ref("");
+
+watch(search, (query) => {
+  router.get('/users', { search: query });
+});
+</script>
+```
+
+Each time a request is made, the input loses focus. To fix this, use `preserveState`:
+
+```js
+watch(search, (query) => {
+  router.get('/users', { search: query }, { preserveState: true });
+});
+```
+
+To avoid making too many requests while typing, use Lodash’s `throttle` to limit requests:
+
+```shell
+npm i --save lodash
+```
+
+now we will use the `throtle` function from lodash:
+
+```js
+import { throttle } from "lodash";
+
+watch(search, throttle((query) => {
+  router.get('/users', { search: query }, { preserveState: true });
+}, 1000));
+```
+
+This ensures requests are made at most once per second, no matter how many keystrokes.
+
+Alternatively, you can use `debounce`, which triggers the request only after the user stops typing:
+
+```js
+import { debounce } from "lodash";
+
+watch(search, debounce((query) => {
+  router.get('/users', { search: query }, { preserveState: true });
+}, 1000));
+```
+
+Now, let’s handle the search in the controller:
+
+```php
+public function index(Request $request)
+{
+    $users = User::when($request->search, function($query) use ($request) {
+        $query->where('name', 'like', '%'. $request->search .'%');
+    })->paginate(10);
+
+    return inertia('Users', ['users' => $users]);
+}
+```
+
+Here, `when` ensures the search query is applied only if `$request->search` is present.
+
+To ensure the search term persists when paginating, chain `withQueryString()` to the pagination:
+
+```php
+public function index(Request $request)
+{
+    $users = User::when($request->search, function($query) use ($request) {
+        $query->where('name', 'like', '%'. $request->search .'%');
+    })->paginate(10)->withQueryString();
+
+    return inertia('Users', ['users' => $users]);
+}
+```
+
+To keep the search term in the input after the request, return the search term from the controller:
+
+```php
+return inertia('Users', ['users' => $users, 'searchTerm' => $request->search]);
+```
+
+Now, in the Vue component:
+
+```js
+const props = defineProps({
+  users: Object,
+  searchTerm: String,
+});
+
+const search = ref(props.searchTerm);
+```
+
+Here’s the final code for creating a paginated table with search functionality in **Laravel**, **Inertia.js**, and **Vue**:
+
+- **The Controller Method**:
+
+```php
+class UserController extends Controller
+{
+    public function index(Request $request)
+    {
+        $users = User::when($request->search, function($query) use ($request) {
+            $query->where('name', 'like', '%'. $request->search .'%');
+        })->paginate(10)->withQueryString();
+
+        return inertia('Users', ['users' => $users, 'searchTerm' => $request->search]);
+    }
+}
+```
+
+- **Vue Component**:
+
+```html
+<script setup>
+import { ref, watch } from "vue";
+import { router } from "@inertiajs/vue3";
+import { debounce } from "lodash";
+
+// Receiving props from the controller
+const props = defineProps({
+  users: Object,
+  searchTerm: String,
+});
+
+// Setting up the search input with the initial value
+const search = ref(props.searchTerm);
+
+// Watch the search input and trigger a search request (with debounce)
+watch(search, debounce((query) => {
+  router.get('/users', { search: query }, { preserveState: true });
+}, 1000));
+</script>
+
+<template>
+  <!-- Search Input -->
+  <div>
+    <input
+      v-model="search"
+      type="search"
+      name="search"
+      class="bg-slate-300 text-slate-800 p-2 rounded-md"
+      placeholder="Search"
+    />
+  </div>
+
+  <!-- Users Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="user in users.data" :key="user.id">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination Links -->
+  <div class="pagination">
+    <Link
+      v-for="link in users.links"
+      :key="link.url"
+      :href="link.url"
+      v-html="link.label"
+      class="p-1 m-1 bg-slate-800 text-white rounded-md"
+      :class="{ 'bg-slate-500': !link.url, 'bg-orange-500': link.active }"
+    />
+  </div>
+
+  <!-- Results Count -->
+  <p>Showing {{ users.from }} to {{ users.to }} of {{ users.total }} users</p>
+</template>
+
 ```
