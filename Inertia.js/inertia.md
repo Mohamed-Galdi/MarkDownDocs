@@ -78,17 +78,14 @@ npm i @vitejs/plugin-vue
 and add it to your **vite.config.js** file:
 
 ```js
-import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue'; // --> ADD THIS LINE
-import laravel from 'laravel-vite-plugin';
 
 export default defineConfig({
     plugins: [
         vue(),  // --> ADD THIS LINE
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-        }),
+]}),
 ```
 
 - Setup the main JavaScript file to boot your Inertia app **resources/js/app.js**
@@ -892,7 +889,7 @@ import Aura from '@primevue/themes/aura'; // Import the desired theme
 
 createInertiaApp({
     title: (title) => `${title} | My App`,
-    
+
     resolve: (name) => {
         // Resolve your pages here
     },
@@ -992,14 +989,12 @@ defineProps({
   <table>
     <thead>
       <tr>
-        <th>ID</th>
         <th>Name</th>
         <th>Email</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="user in users.data" :key="user.id">
-        <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
       </tr>
@@ -1197,40 +1192,27 @@ watch(search, debounce((query) => {
 <template>
   <!-- Search Input -->
   <div>
-    <input
-      v-model="search"
-      type="search"
-      name="search"
+    <input v-model="search" type="search" name="search" placeholder="Search"
       class="bg-slate-300 text-slate-800 p-2 rounded-md"
-      placeholder="Search"
     />
   </div>
 
   <!-- Users Table -->
   <table>
-    <thead>
       <tr>
-        <th>ID</th>
         <th>Name</th>
         <th>Email</th>
       </tr>
-    </thead>
-    <tbody>
       <tr v-for="user in users.data" :key="user.id">
-        <td>{{ user.id }}</td>
         <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
       </tr>
-    </tbody>
   </table>
 
   <!-- Pagination Links -->
   <div class="pagination">
     <Link
-      v-for="link in users.links"
-      :key="link.url"
-      :href="link.url"
-      v-html="link.label"
+      v-for="link in users.links" :key="link.url" :href="link.url" v-html="link.label"
       class="p-1 m-1 bg-slate-800 text-white rounded-md"
       :class="{ 'bg-slate-500': !link.url, 'bg-orange-500': link.active }"
     />
@@ -1239,5 +1221,4 @@ watch(search, debounce((query) => {
   <!-- Results Count -->
   <p>Showing {{ users.from }} to {{ users.to }} of {{ users.total }} users</p>
 </template>
-
 ```
