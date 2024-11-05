@@ -902,6 +902,11 @@ createInertiaApp({
             .use(PrimeVue, {
                 theme: {
                     preset: Aura, // Using the Aura theme as an example
+                    options: {
+                        prefix: "p",
+                        darkModeSelector: "light", // forece light mode
+                        cssLayer: false,
+                    },
                 },
             })
             .mount(el); // Mount the application
