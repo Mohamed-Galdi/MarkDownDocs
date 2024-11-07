@@ -2,7 +2,7 @@
 
 # Table of Contents
 
-1. [What is Inertia.js](#1-what-is-inertia.js)
+1. [What is Inertia.js](#1-what-is-inertiajs)
 2. [Installation](#2-installation)
 3. [Pages](#3-pages)
 4. [Layouts](#4-layouts)
@@ -10,7 +10,7 @@
 6. [Head Component](#6-head-component)
 7. [Link Component](#7-link-component)
 8. [Global Components](#8-global-components)
-9. [Manual Visits, router()](#9-manual-visits-router())
+9. [Manual Visits, router()](#9-manual-visits-router)
 10. [Forms](#10-forms)
 11. [Sharing Data](#11-sharing-data)
 12. [Scroll Management](#12-scroll-management)
