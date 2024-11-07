@@ -2,7 +2,7 @@
 
 # Table of Contents
 
-1. [What is Vue ?](#1-What-is-Vue?)
+1. [What is Vue ?](#1-what-is-vue)
 2. [API Styles](#2-API-Styles)
 3. [Creating a Vue Application](#3-Creating-a-Vue-Application)
 4. [The application instance](#4-The-application-instance)
@@ -14,13 +14,13 @@
 10. [Computed Properties](#10-Computed-Properties)
 11. [Component Classes](#11-Component-Classes)
 12. [Conditional Rendering](#12-Conditional-Rendering)
-13. [List Rendering (v-for)](#13-List-Rendering-(v-for))
-14. [Form Inputs (v-model)](#14-Form-Inputs-(v-model))
+13. [List Rendering (v-for)](#13-list-rendering-v-for)
+14. [Form Inputs (v-model)](#14-form-inputs-v-model)
 15. [Lifecycle Hooks](#15-Lifecycle-Hooks)
 16. [Watchers](#16-Watchers)
 17. [useTemplateRef](#17-useTemplateRef)
 18. [Components](#18-Components)
-19. [Provide / Inject](#19-Provide-/-Inject)
+19. [Provide / Inject](#19-provide--inject)
 20. [Composables](#20-Composables)
 21. [Built-in Components](#21-Built-in-Components)
 
