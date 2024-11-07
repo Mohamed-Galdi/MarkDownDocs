@@ -1,5 +1,29 @@
 ![Vue Header](Vue.js.png)
 
+# Table of Contents
+
+1. [What is Vue ?](#1-What-is-Vue?)
+2. [API Styles](#2-API-Styles)
+3. [Creating a Vue Application](#3-Creating-a-Vue-Application)
+4. [The application instance](#4-The-application-instance)
+5. [Directives](#5-Directives)
+6. [Template Syntax](#6-Template-Syntax)
+7. [Attribute Bindings](#7-Attribute-Bindings)
+8. [Event Handling](#8-Event-Handling)
+9. [Reactive State](#9-Reactive-State)
+10. [Computed Properties](#10-Computed-Properties)
+11. [Component Classes](#11-Component-Classes)
+12. [Conditional Rendering](#12-Conditional-Rendering)
+13. [List Rendering (v-for)](#13-List-Rendering-(v-for))
+14. [Form Inputs (v-model)](#14-Form-Inputs-(v-model))
+15. [Lifecycle Hooks](#15-Lifecycle-Hooks)
+16. [Watchers](#16-Watchers)
+17. [useTemplateRef](#17-useTemplateRef)
+18. [Components](#18-Components)
+19. [Provide / Inject](#19-Provide-/-Inject)
+20. [Composables](#20-Composables)
+21. [Built-in Components](#21-Built-in-Components)
+
 # 1. What is Vue?
 
 Vue is a framework for building user interfaces. The two core features of Vue are:
@@ -582,7 +606,7 @@ The `v-model` directive helps us sync the state of form input elements with co
   <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
   <label for="mike">Mike</label>
   ```
-  
+
 ![multiple checkboxes to same array](<multiple checkboxes to same array.png>)
 
 ## c. Radio Button

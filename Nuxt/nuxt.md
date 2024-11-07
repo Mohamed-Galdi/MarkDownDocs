@@ -1,5 +1,20 @@
 ![nuxt](nuxt.png)
 
+# Table of Contents
+
+1. [Get Started With Nuxt](#1-get-started-with-nuxt)
+2. [Directory Structure](#2-directory-structure)
+3. [Assets](#3-assets)
+4. [Components](#4-components)
+5. [Composables](#5-composables)
+6. [Layouts](#6-layouts)
+7. [Middlewares](#7-middlewares)
+8. [Pages (routing)](#8-pages-routing)
+9. [Data Fetching](#9-data-fetching)
+10. [Utils](#10-utils)
+11. [Helpful Resources](#11-helpful-resources)
+12. [Additional Notes](#12-additional-notes)
+
 # 1. Get Started With Nuxt
 
 Nuxt is a free and open-source framework to create type-safe, performant and production-grade full-stack web applications and websites with Vue.js.
@@ -683,8 +698,6 @@ const props = defineProps({
     <img :src="image" class="w-full h-full object-cover" />
   </div>
 </template>
-
-
 ```
 
 ```html
@@ -698,6 +711,4 @@ import myImage from '~/assets/myimage.png';
   <!-- Pass the resolved image path as a prop -->
   <MyComponent :image="myImage" />
 </template>
-
-
 ```
