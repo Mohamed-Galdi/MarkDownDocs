@@ -524,7 +524,7 @@ The `error` object provides the following fields:
 
 Although it is called an 'error page' it's not a route and shouldn't be placed in your `~/pages` directory. For the same reason, you shouldn't use `definePageMeta` within this page. That being said, you can still use layouts in the error file, by utilizing the `NuxtLayout` component and specifying the name of the layout.
 
-# 6. Data Fetching
+# 9. Data Fetching
 
 Nuxt comes with two composables and a built-in library to perform data-fetching in browser or server environments: `useFetch`, `useAsyncData` and `$fetch`.
 
@@ -578,7 +578,7 @@ const { data, error } = await useAsyncData(() => myGetFunction('users'))
 </script>
 ```
 
-# 7. Utils
+# 10. Utils
 
 ## a. definePageMeta
 
@@ -661,7 +661,7 @@ The main differences between `ref()` and `useState()` in Nuxt 3 are:
    - `ref()` can be used anywhere in Vue components
    - `useState()` is typically used in Nuxt pages, layouts, or plugins
 
-# 8. Helpful Resources
+# 11. Helpful Resources
 
 ## a. Nuxt Modules
 
@@ -671,7 +671,7 @@ For extending your Nuxt application, check out the [Nuxt Modules](https://nuxt.c
 
 Another invaluable resource is [VueUse](https://vueuse.org/), an open-source collection of Vue composition utilities. VueUse provides a wealth of composables for common tasks like handling drag-and-drop, detecting clicks outside elements, managing localStorage, and much more. These composables are crafted by experienced developers and benefit from community contributions, often resulting in more robust and efficient solutions than individual implementations.
 
-# 9. Additional Notes
+# 12. Additional Notes
 
 ## a. Passing Assets Between Components
 
