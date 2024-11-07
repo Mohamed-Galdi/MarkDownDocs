@@ -1,5 +1,24 @@
 ![](inertia.png)
 
+# Table of Contents
+
+1. [What is Inertia.js](#1-what-is-inertia.js)
+2. [Installation](#2-installation)
+3. [Pages](#3-pages)
+4. [Layouts](#4-layouts)
+5. [Named Routes](#5-named-routes)
+6. [Head Component](#6-head-component)
+7. [Link Component](#7-link-component)
+8. [Global Components](#8-global-components)
+9. [Manual Visits, router()](#9-manual-visits-router())
+10. [Forms](#10-forms)
+11. [Sharing Data](#11-sharing-data)
+12. [Scroll Management](#12-scroll-management)
+13. [Authorization](#13-authorization)
+14. [Progress indicators](#14-progress-indicators)
+15. [PrimeVue](#15-primevue)
+16. [Table Example](#16-table-example)
+
 # 1. What is Inertia.js
 
 When you want to take advantage of a backend framework like Laravel—using its ORM, routing, and other built-in features—while also building with modern frontend frameworks like Vue or React, the typical solution is to create a REST or GraphQL API to connect them.
