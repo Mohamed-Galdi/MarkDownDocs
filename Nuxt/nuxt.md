@@ -347,7 +347,7 @@ middleware/
 --| auth.ts
 ```
 
-# 8.Pages (routing)
+# 8. Pages (routing)
 
 One core feature of Nuxt is the file system router. Every Vue file inside the `pages/` directory creates a corresponding URL (or route) that displays the contents of the file.
 
