@@ -9,7 +9,7 @@
 5. [Composables](#5-composables)
 6. [Layouts](#6-layouts)
 7. [Middleware](#7-middleware)
-8. [Pages](#8-pages)
+8. [Pages (routing)](#8-pages-routing)
 9. [Data Fetching](#9-data-fetching)
 10. [Utils](#10-utils)
 11. [Helpful Resources](#11-helpful-resources)
