@@ -17,7 +17,8 @@
 13. [Authorization](#13-authorization)
 14. [Progress indicators](#14-progress-indicators)
 15. [PrimeVue](#15-primevue)
-16. [Table Example](#16-table-example)
+16. [Font Awesome](#16-font-awesome)
+17. [Table Example](#17-table-example)
 
 # 1. What is Inertia.js
 
@@ -986,7 +987,87 @@ PrimeVue's CSS classes can be overridden to style any individual component. For 
 }
 ```
 
-# 16. Table Example:
+# 16. Font Awesome
+
+To add Font Awesome icons to your project, here's a step-by-step guide :
+
+### Step 1: Install the Free Font Awesome Packages
+
+```shell
+npm install @fortawesome/fontawesome-svg-core @fortawesome/free-solid-svg-icons @fortawesome/free-regular-svg-icons @fortawesome/vue-fontawesome@latest
+```
+
+### Step 2: Create a Font Awesome plugin file
+
+Create a new file at `resources/js/plugins/fontawesome.js`:
+
+```js
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+// Import icons you need from free packages
+import { faUser, faHome, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faComment } from '@fortawesome/free-regular-svg-icons';
+
+// Add the icons to the library
+library.add(faUser, faHome, faCog, faComment);
+
+export { FontAwesomeIcon };
+```
+
+### Step 3: Update your app.js file
+
+```js
+import { ZiggyVue } from "../../vendor/tightenco/ziggy";
+import PrimeVue from "primevue/config";
+import Aura from '@primevue/themes/aura';
+
+// Import FontAwesome component
+import { FontAwesomeIcon } from './plugins/fontawesome';
+
+createInertiaApp({
+    title: (title) => `${title} | My App`,
+
+    resolve: (name) => {
+        // Resolve your pages here
+    },
+
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .use(ZiggyVue)
+            .use(PrimeVue, {
+                theme: {
+                    preset: Aura,
+                    options: {
+                        prefix: "p",
+                        darkModeSelector: "light",
+                        cssLayer: false,
+                    },
+                },
+            })
+            .component('font-awesome-icon', FontAwesomeIcon) // Register FontAwesome component globally
+            .mount(el); // Mount the application
+    },
+});
+```
+
+### Step 4: Using Font Awesome in Vue components
+
+```html
+<script setup>
+// No need to import anything when using the global component
+</script>
+
+<template>
+  <div>
+    <font-awesome-icon icon="fa-solid fa-user" />
+    <font-awesome-icon icon="fa-regular fa-comment" />
+  </div>
+</template>
+```
+
+# 17. Table Example:
 
 Let's create a simple table with search functionality using **Laravel**, **Inertia.js**, and **Vue**.
 
